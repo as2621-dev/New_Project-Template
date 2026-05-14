@@ -2,6 +2,28 @@
 
 A slim Claude Code template. 8 commands, 12 rules. No fluff.
 
+## Use this template for a new project
+
+This repo is configured as a **GitHub Template Repository**. Don't fork — use the template button.
+
+1. On GitHub: open the repo page → click **"Use this template" → Create a new repository** → name it (e.g. `acme-app`) and create.
+2. In Cursor / VS Code: **New Window → Clone Repository →** paste the new repo's HTTPS URL.
+3. In the new project root:
+   ```bash
+   cp .env.example .env   # fill in real secrets — .env is gitignored
+   ```
+4. Open Claude Code in that directory and run:
+   ```
+   /cmo "<your rough idea>"
+   /cto
+   /plan-phases
+   /run-phase plans/phase-1-*.md
+   ```
+
+You now have a fresh repo with its own git history, all rules in `CLAUDE.md`, all 8 commands in `.claude/commands/`, and empty `plans/`, `reference/`, `documents/`, `.agents/` ready to fill.
+
+> **Heads up:** `.claude/settings.local.json`, `.env`, and `.cursor/rules/openmemory.mdc` are all gitignored — they're machine-local. The shared, version-controlled config is `.claude/settings.json` (if present), `.env.example`, and everything in `.claude/commands/`.
+
 ## The 12 rules
 
 See [`CLAUDE.md`](./CLAUDE.md). These apply to every task.
