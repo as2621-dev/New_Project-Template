@@ -1,0 +1,5 @@
+# OpenMemory - IDE/Assistant specific rules
+.cursor/rules/openmemory.mdc
+
+# Claude Code runtime state
+.claude/scheduled_tasks.lock
