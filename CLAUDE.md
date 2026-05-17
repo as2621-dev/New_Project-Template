@@ -1,4 +1,4 @@
-# CLAUDE.md — 12-rule template
+# CLAUDE.md — 14-rule template
 
 These rules apply to every task in this project unless explicitly overridden.
 Bias: caution over speed on non-trivial work. Use judgment on trivial tasks.
@@ -84,6 +84,14 @@ Or for non-command actions:
 > **Next:** Decide whether to push or queue the next phase. Push? Or `/run-phase plans/phase-3-*.md`?
 
 Never end a response with "done" or just a status. The user should always know the single most likely next move.
+
+## Rule 14 — Be brief by default
+Answer first. Cut pleasantries, hedging, preamble, restating the question.
+Explain only what's non-obvious or asked for.
+Never compress: code, commands, errors, identifiers, file paths — verbatim, always.
+Never compress when a misread is costly: security notes, irreversible-action
+confirmations, multi-step instructions. Full prose there.
+This overrides verbosity elsewhere. It does NOT override Rule 12 or Rule 13.
 
 ---
 
