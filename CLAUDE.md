@@ -70,6 +70,7 @@ Every response ends with **what comes next**. Not a vague "let me know if you ne
 - After `/run-phase` succeeds → suggest the next phase file, or `/office-hours` if all phases shipped
 - After `/run-phase` fails → suggest `/rca` with the failure mode, or retry the failed sub-phase
 - After `/rca` → suggest applying the fix (manual + `/commit`) or adding it as a sub-phase
+- After `/debug` → if fixed-and-verified, suggest `/commit`; if unresolved after the loop bound, suggest `/rca`
 - After `/commit` → suggest `git push`, the next phase, or `/office-hours`
 - After `/codex` findings → suggest fix-now / new-sub-phase / accept-with-note
 - After `/office-hours` → suggest acting on the one next-call from the session
@@ -88,7 +89,7 @@ Never end a response with "done" or just a status. The user should always know t
 
 ## Commands
 
-This project ships with **8 slash commands**. Use them in this order for a new initiative:
+This project ships with **9 slash commands**. Use them in this order for a new initiative:
 
 | Command | When to use |
 |---|---|
@@ -98,10 +99,11 @@ This project ships with **8 slash commands**. Use them in this order for a new i
 | `/plan-phases` | After `/cto`. Generates N phases, each with exactly 4 sub-phases. Includes a 3-lens self-critique pass. |
 | `/run-phase` | Executes a phase end-to-end: code → per-sub-phase review → fix → validate → phase-level DoD + slop scan + CSO → single commit. Opt-in worktree parallelism. |
 | `/rca` | When something breaks. Root-cause analysis, then proposes a fix. |
+| `/debug` | When a browser bug breaks. Reproduces with `browser-use`, diagnoses with Chrome DevTools, fixes, re-verifies in-browser, loops until gone. |
 | `/commit` | Stage and create a conventional commit. |
 | `/codex` | Adversarial second opinion when stuck or want pushback. 200-IQ pedant. User-triggered, not automatic. |
 
-Phase artifacts live in `plans/`. Execution reports live in `.agents/execution-reports/`. Reference docs live in `reference/`. Codex transcripts in `.agents/codex/`. CSO follow-ups in `.agents/cso-findings/`.
+Phase artifacts live in `plans/`. Execution reports live in `.agents/execution-reports/`. Reference docs live in `reference/`. Codex transcripts in `.agents/codex/`. CSO follow-ups in `.agents/cso-findings/`. Debug reports in `.agents/debug/` (tooling playbook: `reference/browser-debug-playbook.md`).
 
 **Design references (remote):** The full design library lives in a separate public repo to keep this template green:
 

@@ -1,6 +1,6 @@
 # Project Template
 
-A slim Claude Code template. 8 commands, 12 rules. No fluff.
+A slim Claude Code template. 9 commands, 12 rules. No fluff.
 
 ## Use this template for a new project
 
@@ -20,7 +20,7 @@ This repo is configured as a **GitHub Template Repository**. Don't fork — use 
    /run-phase plans/phase-1-*.md
    ```
 
-You now have a fresh repo with its own git history, all rules in `CLAUDE.md`, all 8 commands in `.claude/commands/`, and empty `plans/`, `reference/`, `documents/`, `.agents/` ready to fill.
+You now have a fresh repo with its own git history, all rules in `CLAUDE.md`, all 9 commands in `.claude/commands/`, and empty `plans/`, `reference/`, `documents/`, `.agents/` ready to fill.
 
 > **Heads up:** `.claude/settings.local.json`, `.env`, and `.cursor/rules/openmemory.mdc` are all gitignored — they're machine-local. The shared, version-controlled config is `.claude/settings.json` (if present), `.env.example`, and everything in `.claude/commands/`.
 
@@ -28,7 +28,7 @@ You now have a fresh repo with its own git history, all rules in `CLAUDE.md`, al
 
 See [`CLAUDE.md`](./CLAUDE.md). These apply to every task.
 
-## The 8 commands
+## The 9 commands
 
 | Command | Use it to… |
 |---|---|
@@ -38,6 +38,7 @@ See [`CLAUDE.md`](./CLAUDE.md). These apply to every task.
 | `/plan-phases` | Break a milestone into phases, each with **exactly 4 sub-phases**. Self-critiques through product/engineering/risk lenses. |
 | `/run-phase` | Execute one phase end-to-end. Spawns sub-agents per sub-phase. Phase-end: DoD + slop scan + CSO + single commit. Opt-in worktree parallelism. |
 | `/rca` | Root-cause analysis for a bug. Diagnoses + proposes a fix. Doesn't apply it. |
+| `/debug` | Autonomous browser bug hunt. Reproduces with `browser-use`, diagnoses with Chrome DevTools, fixes, re-verifies in-browser, loops until gone. Applies the fix; hands off to `/commit`. |
 | `/commit` | Conventional commit. Stages explicit files. Never amends. Never skips hooks. |
 | `/codex` | Adversarial second opinion. The 200-IQ pedant. Use when stuck or want pushback that doesn't social-smooth. |
 
@@ -51,6 +52,7 @@ See [`CLAUDE.md`](./CLAUDE.md). These apply to every task.
 /run-phase plans/phase-2-bar.md       → ...
 /office-hours                          → weekly check-in
 /rca "thing X broke"                   → .agents/rca/*.md (when bugs happen)
+/debug "checkout button does nothing"  → .agents/debug/*.md (browser bugs, auto-fixed)
 /codex challenge plans/phase-3-*.md   → when you want adversarial pressure
 ```
 
@@ -68,10 +70,11 @@ All three must pass. Findings get fixed before commit (or for medium/low CSO, lo
 
 ```
 CLAUDE.md                          # The 13 rules
-.claude/commands/                  # The 8 slash commands
+.claude/commands/                  # The 9 slash commands
 documents/                         # Product briefs (CMO output)
 plans/                             # Master plan + phase files (CTO + plan-phases output)
 reference/                         # Stack notes, conventions, API contracts, design language (CTO output)
+  └── browser-debug-playbook.md    # Tool routing + CLI cheat-sheets for /debug
 design-references/                 # Pointer only — full library is remote
   └── RESOURCES.md                 # Points to github.com/ashesh2621/design-references
                                    # (86 skills + 511 design systems + 2,827 components
@@ -80,13 +83,14 @@ design-references/                 # Pointer only — full library is remote
   ├── execution-reports/           # Per-sub-phase reports from /run-phase
   ├── office-hours/                # Weekly diagnostic notes
   ├── rca/                         # Root-cause analyses
+  ├── debug/                       # Browser debug reports from /debug
   ├── codex/                       # Codex transcripts
   └── cso-findings/                # Deferred medium/low security findings
 ```
 
 ## Notes
 
-- `/run-phase` is the only command that touches feature code. Everything else writes docs, plans, or reports.
+- `/run-phase` and `/debug` are the only commands that touch feature code (`/run-phase` builds phases; `/debug` applies a verified bug fix). Everything else writes docs, plans, or reports.
 - One commit per phase. Sub-phase progress in `plans/[slug]-progress.md` so a failed phase resumes cleanly.
 - Each sub-phase runs in a **fresh sub-agent context** — keep sub-phases scoped tightly enough that an agent can execute one given only the phase file and `CLAUDE.md`.
 - `/codex` is **user-triggered only**. `/run-phase` does NOT auto-invoke Codex on findings — humans decide when to escalate.
