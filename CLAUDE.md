@@ -68,7 +68,8 @@ Every response ends with **what comes next**. Not a vague "let me know if you ne
 - After `/cmo` → suggest `/cto`
 - After `/cto` → suggest `/to-issues`
 - After `/to-issues` → suggest `/grab-issue`
-- After `/grab-issue` succeeds → suggest the next `/grab-issue`, or `/office-hours` if the backlog is empty
+- After `/grab-issue` succeeds → suggest the next `/grab-issue`, or `/office-hours` if the backlog is empty (or `/improve-architecture` if a few slices have landed since the last review)
+- After `/improve-architecture` → suggest `/grab-issue` on the highest-leverage refactor slice it filed
 - After `/grab-issue` fails → suggest `/rca` with the failure mode, or retry the slice
 - After `/rca` → suggest applying the fix (manual + `/commit`) or filing it as a new slice issue
 - After `/debug` → if fixed-and-verified, suggest `/commit`; if unresolved after the loop bound, suggest `/rca`
@@ -99,7 +100,7 @@ This overrides verbosity elsewhere. It does NOT override Rule 12 or Rule 13.
 
 ## Commands
 
-This project ships with **11 slash commands**. The core pipeline runs top-to-bottom; the rest are support commands.
+This project ships with **12 slash commands**. The core pipeline runs top-to-bottom; the rest are support commands.
 
 | Command | When to use |
 |---|---|
@@ -108,6 +109,7 @@ This project ships with **11 slash commands**. The core pipeline runs top-to-bot
 | `/cto` | After `/cmo`. Produces **the PRD** (with a Technical Foundation: architecture, stack, key decisions, milestones) and reference docs. |
 | `/to-issues` | After `/cto`. Slices the PRD into vertical-slice (tracer-bullet) issues on the GitHub kanban backlog. Replaces `/plan-phases`. |
 | `/grab-issue` | After `/to-issues`. Pulls the top unblocked slice, builds it end-to-end: code → review → fix → validate → slop scan + CSO → single commit → move to done. Replaces `/run-phase`. |
+| `/improve-architecture` | Every few days. Finds shallow/tangled modules, proposes deepenings in plain language, files refactor slices, and syncs `plans/prd.md` + `reference/`. Also runs proactively inside `/cto` on re-runs. |
 | `/office-hours` | Weekly diagnostic — what's stuck, what's risky, what's next. Run regularly. |
 | `/rca` | When something breaks. Root-cause analysis, then proposes a fix. |
 | `/debug` | When a browser bug breaks. Reproduces with `browser-use`, diagnoses with Chrome DevTools, fixes, re-verifies in-browser, loops until gone. |

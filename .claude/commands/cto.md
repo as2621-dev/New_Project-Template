@@ -19,6 +19,9 @@ You do NOT slice work into issues. That's `/to-issues`. You do NOT write feature
 1. Read the product brief at `$ARGUMENTS` (default: `documents/product-brief.md`). If it doesn't exist, stop and tell the user to run `/cmo` first.
 2. Read `CLAUDE.md` for project rules.
 3. If a repo exists, skim its current state (top-level files, `package.json` / `pyproject.toml` / etc).
+4. **If application code already exists (a re-run over a live codebase), run
+   `/improve-architecture` first** so the Technical Foundation you write below reflects the
+   real architecture and any pending deepenings — don't rewrite the PRD from a stale picture.
 
 ## Step 1 — Tech stack decision
 
@@ -34,6 +37,12 @@ For each of these, **pick one** and write a one-sentence rationale:
 Per Rule 1, state any assumption explicitly. Per Rule 7, if two options are close, pick one and flag the other for revisit — don't blend.
 
 If the brief lacks information to decide, ask the user before guessing.
+
+**Design for depth from the start.** When you shape the architecture for the Technical
+Foundation, prefer **deep modules** — lots of useful behavior behind a small, stable
+interface — over many shallow ones the rest of the system must learn. Aim for good locality
+(related logic lives together) and clean seams. This is the same lens `/improve-architecture`
+applies later; applying it now means fewer deepening refactors down the line.
 
 ## Step 2 — Write the PRD (with its Technical Foundation)
 

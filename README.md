@@ -1,6 +1,6 @@
 # Project Template
 
-A slim Claude Code template. 11 commands, 14 rules. No fluff.
+A slim Claude Code template. 12 commands, 14 rules. No fluff.
 
 ## Use this template for a new project
 
@@ -21,7 +21,7 @@ This repo is configured as a **GitHub Template Repository**. Don't fork — use 
    /grab-issue
    ```
 
-You now have a fresh repo with its own git history, all rules in `CLAUDE.md`, all 11 commands in `.claude/commands/`, and empty `plans/`, `reference/`, `documents/`, `.agents/` ready to fill.
+You now have a fresh repo with its own git history, all rules in `CLAUDE.md`, all 12 commands in `.claude/commands/`, and empty `plans/`, `reference/`, `documents/`, `.agents/` ready to fill.
 
 > **Heads up:** `.claude/settings.local.json`, `.env`, and `.cursor/rules/openmemory.mdc` are all gitignored — they're machine-local. The shared, version-controlled config is `.claude/settings.json` (if present), `.env.example`, and everything in `.claude/commands/`.
 
@@ -29,7 +29,7 @@ You now have a fresh repo with its own git history, all rules in `CLAUDE.md`, al
 
 See [`CLAUDE.md`](./CLAUDE.md). These apply to every task.
 
-## The 11 commands
+## The 12 commands
 
 The first five are the core pipeline (top-to-bottom); the rest are support commands.
 
@@ -40,6 +40,7 @@ The first five are the core pipeline (top-to-bottom); the rest are support comma
 | `/cto` | Turn the product brief into a **PRD** (with a Technical Foundation section) + reference docs. |
 | `/to-issues` | Slice the PRD into vertical-slice (tracer-bullet) issues on the GitHub kanban backlog. |
 | `/grab-issue` | Pull the top unblocked slice and build it end-to-end: code → review → fix → validate → slop scan + CSO → single commit → done. |
+| `/improve-architecture` | Every few days. Find shallow/tangled modules, propose deepenings in plain language, file refactor slices, and sync the PRD Technical Foundation + reference docs. Runs proactively inside `/cto` on re-runs. |
 | `/office-hours` | Run a weekly diagnostic. What's stuck, what's risky, what's the next call. |
 | `/rca` | Root-cause analysis for a bug. Diagnoses + proposes a fix. Doesn't apply it. |
 | `/debug` | Autonomous browser bug hunt. Reproduces with `browser-use`, diagnoses with Chrome DevTools, fixes, re-verifies in-browser, loops until gone. Applies the fix; hands off to `/commit`. |
@@ -56,6 +57,7 @@ The first five are the core pipeline (top-to-bottom); the rest are support comma
 /to-issues                              → vertical-slice issues on GitHub (status:backlog)
 /grab-issue                             → build top slice → slop scan → CSO → 1 commit → status:done
 /grab-issue                             → next unblocked slice → ...
+/improve-architecture                   → every few days: deepening RFCs + synced PRD/reference docs
 /office-hours                           → weekly check-in
 /rca "thing X broke"                    → .agents/rca/*.md (when bugs happen)
 /debug "checkout button does nothing"   → .agents/debug/*.md (browser bugs, auto-fixed)
@@ -87,7 +89,7 @@ All must pass. Findings get fixed before commit (or for medium/low CSO, logged t
 
 ```
 CLAUDE.md                          # The 14 rules
-.claude/commands/                  # The 11 slash commands
+.claude/commands/                  # The 12 slash commands
 documents/                         # Grilling notes + product briefs (grill-me + CMO output)
 plans/                             # PRD with Technical Foundation (CTO output)
 reference/                         # Stack notes, conventions, API contracts, design language (CTO output)
