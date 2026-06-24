@@ -157,6 +157,10 @@ End with:
 > "Slice #<N> shipped → `status:done`. Unblocked: #x, #y.
 > **Next:** run `/grab-issue` for the next slice, or `/office-hours` if the backlog is empty."
 
+To drain the backlog unattended, wrap this command in `/loop /grab-issue` — it keeps pulling
+the next unblocked slice **one at a time** (never in parallel, no worktrees) until nothing is
+grabbable, then stops.
+
 ## Rules
 
 - Per Rule 4, success criteria = the issue's acceptance criteria. Loop until verified.
