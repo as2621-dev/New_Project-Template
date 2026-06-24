@@ -1,5 +1,5 @@
 ---
-description: Pull the top unblocked slice off the GitHub kanban backlog, build it end-to-end, review it, and move it to done. Replaces /run-phase.
+description: Pull the top unblocked slice off the GitHub kanban backlog, build it test-first (red-green-refactor), review it, and move it to done. Replaces /run-phase.
 argument-hint: [optional: issue number to grab a specific slice; defaults to the next unblocked one]
 ---
 
@@ -38,19 +38,42 @@ criteria back in one or two lines (Rule 10 checkpoint).
 Move the card: remove `status:backlog`, add `status:in-progress`. Assign yourself if the
 tracker supports it. Post a one-line comment: "Picked up — building this slice."
 
-## Step 3 — Build the slice end-to-end
+## Step 3 — Build the slice test-first (red → green → refactor)
 
-Implement the **complete vertical path** the issue describes (data → logic → UI → test),
-and nothing beyond it (Rule 2, Rule 3 — surgical; do not gold-plate adjacent code).
+Build the **complete vertical path** the issue describes (data → logic → UI → test), and
+nothing beyond it (Rule 2, Rule 3 — surgical; do not gold-plate adjacent code). Drive it
+**test-first**, one behavior at a time — do NOT write all the tests up front (that's
+horizontal slicing; it couples tests to a design you haven't validated yet).
 
-- Follow `reference/conventions.md` and existing patterns (Rule 8, Rule 11). Read exports
-  and immediate callers before adding code.
+**Before the loop:** restate the public interface (the seam) you'll build against, and turn
+the issue's acceptance criteria into an ordered list of observable behaviors. Each behavior
+is one tracer bullet.
+
+For each behavior, in order:
+
+1. **RED** — write **one** test for that behavior, against the **public interface**, not
+   internals. Run it; watch it fail for the right reason. A test that can't fail when the
+   business logic is wrong is mis-written (Rule 9).
+2. **GREEN** — write the **minimum** code to pass it. Nothing speculative (Rule 2). Follow
+   `reference/conventions.md` and existing patterns (Rule 8, Rule 11) — read exports and
+   immediate callers before adding code.
+3. Move to the next behavior. Keep the bar green between bullets.
+
+**Refactor** only once the tests for the slice are green — never while a test is red. Remove
+duplication and **deepen the interface** (push behavior behind the seam so callers learn
+less — same depth lens as `/improve-architecture`). The green tests are your safety net;
+behavior must not change during a refactor.
+
+Per-bullet checklist (Rule 9): the test describes observable behavior, not internal
+mechanism; uses only the public interface; survives an internal refactor; and the
+implementation contains only what the current test needs.
+
 - **If the slice touches UI:** consult the remote design library before writing from
   scratch — read `reference/design-language.md` for tokens; fetch relevant
   `skills/` and `components/` from
   `https://raw.githubusercontent.com/ashesh2621/design-references/main/` and adapt to the
-  project's tokens (credit original creators in comments).
-- Verify as you go: imports resolve, types check.
+  project's tokens (credit original creators in comments). Test UI behavior at the highest
+  seam that's practical (a rendered-behavior test over a snapshot of internals).
 
 ## Step 4 — Self-review and fix
 

@@ -108,7 +108,7 @@ This project ships with **12 slash commands**. The core pipeline runs top-to-bot
 | `/cmo` | After `/grill-me`. Refines scope, fills product holes, sharpens the pitch into a product brief. |
 | `/cto` | After `/cmo`. Produces **the PRD** (with a Technical Foundation: architecture, stack, key decisions, milestones) and reference docs. |
 | `/to-issues` | After `/cto`. Slices the PRD into vertical-slice (tracer-bullet) issues on the GitHub kanban backlog. Replaces `/plan-phases`. |
-| `/grab-issue` | After `/to-issues`. Pulls the top unblocked slice, builds it end-to-end: code → review → fix → validate → slop scan + CSO → single commit → move to done. Replaces `/run-phase`. |
+| `/grab-issue` | After `/to-issues`. Pulls the top unblocked slice, builds it **test-first (red→green→refactor)**: test → code → refactor-for-depth → review → validate → slop scan + CSO → single commit → move to done. Replaces `/run-phase`. |
 | `/improve-architecture` | Every few days. Finds shallow/tangled modules, proposes deepenings in plain language, files refactor slices, and syncs `plans/prd.md` + `reference/`. Also runs proactively inside `/cto` on re-runs. |
 | `/office-hours` | Weekly diagnostic — what's stuck, what's risky, what's next. Run regularly. |
 | `/rca` | When something breaks. Root-cause analysis, then proposes a fix. |

@@ -39,7 +39,7 @@ The first five are the core pipeline (top-to-bottom); the rest are support comma
 | `/cmo` | Refine the grilled idea into a product brief. Fills holes, sharpens scope. |
 | `/cto` | Turn the product brief into a **PRD** (with a Technical Foundation section) + reference docs. |
 | `/to-issues` | Slice the PRD into vertical-slice (tracer-bullet) issues on the GitHub kanban backlog. |
-| `/grab-issue` | Pull the top unblocked slice and build it end-to-end: code → review → fix → validate → slop scan + CSO → single commit → done. |
+| `/grab-issue` | Pull the top unblocked slice and build it **test-first (red→green→refactor)**: test → code → refactor-for-depth → review → validate → slop scan + CSO → single commit → done. |
 | `/improve-architecture` | Every few days. Find shallow/tangled modules, propose deepenings in plain language, file refactor slices, and sync the PRD Technical Foundation + reference docs. Runs proactively inside `/cto` on re-runs. |
 | `/office-hours` | Run a weekly diagnostic. What's stuck, what's risky, what's the next call. |
 | `/rca` | Root-cause analysis for a bug. Diagnoses + proposes a fix. Doesn't apply it. |
