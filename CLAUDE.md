@@ -64,16 +64,18 @@ Default to surfacing uncertainty, not hiding it.
 ## Rule 13 — Always anticipate the next step
 Every response ends with **what comes next**. Not a vague "let me know if you need anything" — a concrete, specific next action the user is most likely to want.
 
+- After `/grill-me` → suggest `/cmo`
 - After `/cmo` → suggest `/cto`
-- After `/cto` → suggest `/plan-phases`
-- After `/plan-phases` → suggest `/run-phase plans/phase-1-*.md`
-- After `/run-phase` succeeds → suggest the next phase file, or `/office-hours` if all phases shipped
-- After `/run-phase` fails → suggest `/rca` with the failure mode, or retry the failed sub-phase
-- After `/rca` → suggest applying the fix (manual + `/commit`) or adding it as a sub-phase
+- After `/cto` → suggest `/to-issues`
+- After `/to-issues` → suggest `/grab-issue`
+- After `/grab-issue` succeeds → suggest the next `/grab-issue`, or `/office-hours` if the backlog is empty
+- After `/grab-issue` fails → suggest `/rca` with the failure mode, or retry the slice
+- After `/rca` → suggest applying the fix (manual + `/commit`) or filing it as a new slice issue
 - After `/debug` → if fixed-and-verified, suggest `/commit`; if unresolved after the loop bound, suggest `/rca`
-- After `/commit` → suggest `git push`, the next phase, or `/office-hours`
-- After `/codex` findings → suggest fix-now / new-sub-phase / accept-with-note
+- After `/commit` → suggest `git push`, the next `/grab-issue`, or `/office-hours`
+- After `/codex` findings → suggest fix-now / new-slice-issue / accept-with-note
 - After `/office-hours` → suggest acting on the one next-call from the session
+- After `/handoff` → suggest opening a fresh session pointed at the handoff doc
 
 This applies **at every step inside a command too**, not just at hand-off. If you finish a planning section, name what part of the plan needs the user's input next. If you spot a blocker mid-execution, name the unblock action.
 
@@ -81,7 +83,7 @@ Format: end-of-turn line should read something like:
 > **Next:** `/cto` (turn this brief into a master plan + reference docs)
 
 Or for non-command actions:
-> **Next:** Decide whether to push or queue the next phase. Push? Or `/run-phase plans/phase-3-*.md`?
+> **Next:** Decide whether to push or grab the next slice. Push? Or `/grab-issue`?
 
 Never end a response with "done" or just a status. The user should always know the single most likely next move.
 
@@ -97,21 +99,23 @@ This overrides verbosity elsewhere. It does NOT override Rule 12 or Rule 13.
 
 ## Commands
 
-This project ships with **9 slash commands**. Use them in this order for a new initiative:
+This project ships with **11 slash commands**. The core pipeline runs top-to-bottom; the rest are support commands.
 
 | Command | When to use |
 |---|---|
+| `/grill-me` | **Before `/cmo`.** Relentless, NON-technical interview that pressure-tests the raw idea. Critical — pushes back, won't flatter. |
+| `/cmo` | After `/grill-me`. Refines scope, fills product holes, sharpens the pitch into a product brief. |
+| `/cto` | After `/cmo`. Produces the master plan, **the PRD**, and reference docs (architecture, conventions, key APIs). |
+| `/to-issues` | After `/cto`. Slices the PRD into vertical-slice (tracer-bullet) issues on the GitHub kanban backlog. Replaces `/plan-phases`. |
+| `/grab-issue` | After `/to-issues`. Pulls the top unblocked slice, builds it end-to-end: code → review → fix → validate → slop scan + CSO → single commit → move to done. Replaces `/run-phase`. |
 | `/office-hours` | Weekly diagnostic — what's stuck, what's risky, what's next. Run regularly. |
-| `/cmo` | At the start of a new idea. Refines scope, fills product holes, sharpens the pitch. |
-| `/cto` | After `/cmo`. Produces the master plan and reference docs (architecture, conventions, key APIs). |
-| `/plan-phases` | After `/cto`. Generates N phases, each with exactly 4 sub-phases. Includes a 3-lens self-critique pass. |
-| `/run-phase` | Executes a phase end-to-end: code → per-sub-phase review → fix → validate → phase-level DoD + slop scan + CSO → single commit. Opt-in worktree parallelism. |
 | `/rca` | When something breaks. Root-cause analysis, then proposes a fix. |
 | `/debug` | When a browser bug breaks. Reproduces with `browser-use`, diagnoses with Chrome DevTools, fixes, re-verifies in-browser, loops until gone. |
 | `/commit` | Stage and create a conventional commit. |
 | `/codex` | Adversarial second opinion when stuck or want pushback. 200-IQ pedant. User-triggered, not automatic. |
+| `/handoff` | Compact the conversation into a handoff doc (saved to temp, not committed) so a fresh agent can continue. |
 
-Phase artifacts live in `plans/`. Execution reports live in `.agents/execution-reports/`. Reference docs live in `reference/`. Codex transcripts in `.agents/codex/`. CSO follow-ups in `.agents/cso-findings/`. Debug reports in `.agents/debug/` (tooling playbook: `reference/browser-debug-playbook.md`).
+Plan + PRD artifacts live in `plans/`. Slice work lives on **GitHub Issues** — the kanban board is the `status:backlog` / `status:in-progress` / `status:review` / `status:done` labels. Reference docs live in `reference/`. Codex transcripts in `.agents/codex/`. CSO follow-ups in `.agents/cso-findings/`. Debug reports in `.agents/debug/` (tooling playbook: `reference/browser-debug-playbook.md`). Handoff docs go to the OS temp / scratchpad, never committed.
 
 **Design references (remote):** The full design library lives in a separate public repo to keep this template green:
 
@@ -119,6 +123,6 @@ Phase artifacts live in `plans/`. Execution reports live in `.agents/execution-r
 
 Contents: 86 skills + 511 design systems + 2,827 components + 20,660 shared_code templates, scraped from aura.build.
 
-`/cto` fetches `design-systems/INDEX.md` from there when picking a visual language for UI products. `/run-phase` fetches relevant `skills/` and `components/` when building UI sub-phases. Both commands `curl` indexes first, then fetch full content only for the items they decide to use.
+`/cto` fetches `design-systems/INDEX.md` from there when picking a visual language for UI products. `/grab-issue` fetches relevant `skills/` and `components/` when building UI slices. Both commands `curl` indexes first, then fetch full content only for the items they decide to use.
 
 Local pointer + fetch recipes: `design-references/RESOURCES.md`.

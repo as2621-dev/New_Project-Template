@@ -1,5 +1,5 @@
 ---
-description: Produce the master plan and reference docs from the product brief. Run AFTER /cmo, BEFORE /plan-phases.
+description: Produce the master plan, the PRD, and reference docs from the product brief. Run AFTER /cmo, BEFORE /to-issues.
 argument-hint: [optional: path to product brief; defaults to documents/product-brief.md]
 ---
 
@@ -7,9 +7,10 @@ argument-hint: [optional: path to product brief; defaults to documents/product-b
 
 You are the **CTO**. Your job is to take the product brief (from `/cmo`) and turn it into:
 1. A **master plan** — the technical north star (architecture, stack, milestones, key decisions)
-2. A set of **reference docs** — the conventions and API/library references future phases will rely on
+2. A **PRD** — the product spec (problem, solution, user stories, decisions) that `/to-issues` slices into a backlog
+3. A set of **reference docs** — the conventions and API/library references future work will rely on
 
-You do NOT generate per-phase task lists. That's `/plan-phases`. You do NOT write feature code. That's `/run-phase`.
+You do NOT slice work into issues. That's `/to-issues`. You do NOT write feature code. That's `/grab-issue`.
 
 ## Step 0 — Load inputs
 
@@ -62,7 +63,7 @@ Save to `plans/master-plan.md`:
 1. ...
 2. ...
 
-## Milestones (not phases — phases come from /plan-phases)
+## Milestones (not slices — slices come from /to-issues)
 - **M1 — [name]:** [what's true when this is done]
 - **M2 — [name]:** ...
 - **M3 — [name]:** ...
@@ -73,9 +74,58 @@ Save to `plans/master-plan.md`:
 ## Out of scope
 [What this plan explicitly does NOT do — protect against scope creep]
 
-## Open questions for /plan-phases
+## Open questions for /to-issues
 [Anything the phase planner needs to resolve]
 ```
+
+## Step 2b — Write the PRD
+
+Adapted from Matt Pocock's `to-prd`. **Synthesize — do not re-interview the user.** The
+grilling (`/grill-me`) and `/cmo` already did the interview; you have the brief and the
+master plan. Turn what you already know into a product spec that `/to-issues` can slice.
+
+Use the project's domain vocabulary (Rule 11). Save to `plans/prd.md`:
+
+```markdown
+# PRD — [product name]
+
+**Date:** [date]
+**Source:** documents/product-brief.md + plans/master-plan.md
+**Status:** Ready for /to-issues
+
+## Problem Statement
+[The problem the user faces, from the user's perspective. Plain language.]
+
+## Solution
+[The solution, from the user's perspective. What it does for them — not how it's built.]
+
+## User Stories
+[A LONG, numbered list. Format: "As a <actor>, I want <feature>, so that <benefit>."
+Cover every aspect of the MVP from the brief. This list is what `/to-issues` maps to
+vertical slices, so be extensive — thin gaps here become missing slices later.]
+1. As a …, I want …, so that …
+2. …
+
+## Implementation Decisions
+[Carry forward the decisions already made in the master plan — modules to build/modify,
+interfaces, architectural choices, schema/API-contract shape. Prose, not file paths or
+code (they go stale). Exception: a tiny decision-encoding snippet — a type shape, schema,
+or state machine — is fine if it pins a decision more precisely than prose.]
+
+## Testing Decisions
+[What makes a good test here (test external behavior, not implementation). Which areas get
+tested, and prior art in the codebase to mirror. Ties to Rule 9.]
+
+## Out of Scope
+[What this PRD explicitly does NOT cover — pulled from the brief's MVP boundary.]
+
+## Further Notes
+[Anything else the slicer or builders need.]
+```
+
+After writing, sanity-check the user-story list against the brief's MVP: every MVP
+capability must trace to at least one story. If a capability has no story, add it or flag
+the gap (Rule 12).
 
 ## Step 3 — Reference docs
 
@@ -117,7 +167,7 @@ If the product has a frontend:
 
 3. **Propose ONE** to the user with a one-sentence rationale per candidate. Let the user pick or override.
 
-4. Once picked, write `reference/design-language.md` with: the chosen system's URL, the lifted tokens (colors, type, spacing), the sections to adopt, and the voice/tone notes. **Copy the actual token values into `reference/design-language.md`** — `/run-phase` reads that file, not the remote system, so it must be self-contained.
+4. Once picked, write `reference/design-language.md` with: the chosen system's URL, the lifted tokens (colors, type, spacing), the sections to adopt, and the voice/tone notes. **Copy the actual token values into `reference/design-language.md`** — `/grab-issue` reads that file, not the remote system, so it must be self-contained.
 
 ## Step 4 — Sanity check against the brief
 
@@ -131,12 +181,12 @@ If any check fails, fix the plan or escalate to the user. Per Rule 12, do not pa
 ## Step 5 — Hand off
 
 End with a summary:
-> "Master plan saved to `plans/master-plan.md`. Reference docs: [list].
-> Next: run `/plan-phases` to break M1 into phases (each phase will have exactly 4 sub-phases)."
+> "Master plan saved to `plans/master-plan.md`. PRD saved to `plans/prd.md`. Reference docs: [list].
+> **Next:** run `/to-issues` to slice the PRD into vertical-slice issues on the GitHub kanban backlog."
 
 ## Rules
 
 - Per Rule 2, do not add components you don't need. If the product is static frontend + one API, don't add a job queue "for later."
 - Per Rule 11, follow `CLAUDE.md` stack guidance unless there's a documented reason to deviate.
 - Per Rule 5, do not let the model invent stack details — when in doubt, ask the user.
-- Do not produce phase-by-phase breakdowns here. Milestones are coarse-grained. `/plan-phases` does the slicing.
+- Do not slice work into issues here. Milestones are coarse-grained; the PRD's user stories are the seam. `/to-issues` does the vertical slicing.
