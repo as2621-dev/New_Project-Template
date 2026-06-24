@@ -15,7 +15,9 @@ the old `/plan-phases`: no 4-sub-phase phases — thin end-to-end slices instead
    user to run `/cto` (the PRD now ships from `/cto`).
 2. Read `CLAUDE.md` and relevant `reference/` docs for the domain glossary and conventions
    (Rule 11 — issue titles use the project's vocabulary). The PRD's Technical Foundation
-   section is the architecture context — there is no separate master plan.
+   section is the architecture context — there is no separate master plan. Note its
+   **Module contracts** (per-deep-module requirements + edge cases): for each slice, the
+   contracts of the modules it touches become the slice's edge-case acceptance criteria.
 3. If the repo has code, skim it for the current state and **prefactoring opportunities**:
    "make the change easy, then make the easy change."
 
@@ -101,9 +103,15 @@ implementation. No file paths or code snippets — they go stale. Exception: a t
 decision-encoding snippet from a prototype (schema, type shape, state machine) is fine.]
 
 ## Acceptance criteria
-- [ ] Criterion 1 (observable, testable — fails if business logic is wrong, per Rule 9)
-- [ ] Criterion 2
-- [ ] Criterion 3
+[Observable, testable behaviors — these are the test specs the builder drives red-green
+against. Expand them from the **Module contracts** in the PRD's Technical Foundation: for
+every deep module this slice touches, pull in its requirements and edge cases (empty input,
+conflict, concurrent access, failure, boundaries) as concrete criteria. Prose/checkboxes
+only — NOT executable tests; `/grab-issue` writes those at build, one behavior at a time.]
+- [ ] Happy path: [the core behavior this slice delivers] (fails if business logic is wrong, per Rule 9)
+- [ ] Edge case: [from the touched module's contract]
+- [ ] Edge case: [from the touched module's contract]
+- [ ] Error/boundary: [what must happen when input is bad / a dependency fails]
 
 ## User stories covered
 - PRD story #N: As a …, I want …, so that …

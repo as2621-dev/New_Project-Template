@@ -74,6 +74,14 @@ Use the project's domain vocabulary (Rule 11). Save to `plans/prd.md`:
 - **Architecture:** one ASCII or mermaid diagram — boxes for the major components, arrows
   for data flow.
 - **Key design decisions:** numbered list; each item = decision + why + what it rules out.
+- **Module contracts (one per deep module):** for each deep module in the architecture,
+  capture — in **plain prose, NOT code** — its single **responsibility**, its key
+  **requirements** (what it must always do), and the notable **edge cases** it must handle
+  (empty input, conflict, concurrent access, failure, boundary values). These are test
+  *intentions*, not tests. `/to-issues` expands the relevant ones into each slice's
+  acceptance criteria, and `/grab-issue` turns those into actual red-green tests at build
+  time. **Do NOT write executable tests here** — writing tests before the interface exists
+  is the horizontal-slicing anti-pattern our test-first build loop bans.
 - **Milestones (coarse, not slices — slices come from /to-issues):**
   - M1 — [name]: [what's true when done] · M2 — … · M3 — …
 - **Riskiest assumption + how we de-risk it:** [carry from the brief; which milestone tests it]
