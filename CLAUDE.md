@@ -80,7 +80,7 @@ Every response ends with **what comes next**. Not a vague "let me know if you ne
 This applies **at every step inside a command too**, not just at hand-off. If you finish a planning section, name what part of the plan needs the user's input next. If you spot a blocker mid-execution, name the unblock action.
 
 Format: end-of-turn line should read something like:
-> **Next:** `/cto` (turn this brief into a master plan + reference docs)
+> **Next:** `/cto` (turn this brief into a PRD + reference docs)
 
 Or for non-command actions:
 > **Next:** Decide whether to push or grab the next slice. Push? Or `/grab-issue`?
@@ -105,7 +105,7 @@ This project ships with **11 slash commands**. The core pipeline runs top-to-bot
 |---|---|
 | `/grill-me` | **Before `/cmo`.** Relentless, NON-technical interview that pressure-tests the raw idea. Critical — pushes back, won't flatter. |
 | `/cmo` | After `/grill-me`. Refines scope, fills product holes, sharpens the pitch into a product brief. |
-| `/cto` | After `/cmo`. Produces the master plan, **the PRD**, and reference docs (architecture, conventions, key APIs). |
+| `/cto` | After `/cmo`. Produces **the PRD** (with a Technical Foundation: architecture, stack, key decisions, milestones) and reference docs. |
 | `/to-issues` | After `/cto`. Slices the PRD into vertical-slice (tracer-bullet) issues on the GitHub kanban backlog. Replaces `/plan-phases`. |
 | `/grab-issue` | After `/to-issues`. Pulls the top unblocked slice, builds it end-to-end: code → review → fix → validate → slop scan + CSO → single commit → move to done. Replaces `/run-phase`. |
 | `/office-hours` | Weekly diagnostic — what's stuck, what's risky, what's next. Run regularly. |
@@ -115,7 +115,7 @@ This project ships with **11 slash commands**. The core pipeline runs top-to-bot
 | `/codex` | Adversarial second opinion when stuck or want pushback. 200-IQ pedant. User-triggered, not automatic. |
 | `/handoff` | Compact the conversation into a handoff doc (saved to temp, not committed) so a fresh agent can continue. |
 
-Plan + PRD artifacts live in `plans/`. Slice work lives on **GitHub Issues** — the kanban board is the `status:backlog` / `status:in-progress` / `status:review` / `status:done` labels. Reference docs live in `reference/`. Codex transcripts in `.agents/codex/`. CSO follow-ups in `.agents/cso-findings/`. Debug reports in `.agents/debug/` (tooling playbook: `reference/browser-debug-playbook.md`). Handoff docs go to the OS temp / scratchpad, never committed.
+The PRD (with its Technical Foundation) lives in `plans/prd.md` — there is no separate master plan. Slice work lives on **GitHub Issues** — the kanban board is the `status:backlog` / `status:in-progress` / `status:review` / `status:done` labels, viewable as a drag-and-drop board in the repo's **GitHub Project**. Each slice is sized to one subagent within a 120k-token budget. Reference docs live in `reference/`. Codex transcripts in `.agents/codex/`. CSO follow-ups in `.agents/cso-findings/`. Debug reports in `.agents/debug/` (tooling playbook: `reference/browser-debug-playbook.md`). Handoff docs go to the OS temp / scratchpad, never committed.
 
 **Design references (remote):** The full design library lives in a separate public repo to keep this template green:
 

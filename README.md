@@ -37,7 +37,7 @@ The first five are the core pipeline (top-to-bottom); the rest are support comma
 |---|---|
 | `/grill-me` | Pressure-test a raw idea with a relentless, **non-technical** interview before `/cmo`. Critical — pushes back, won't flatter. |
 | `/cmo` | Refine the grilled idea into a product brief. Fills holes, sharpens scope. |
-| `/cto` | Turn the product brief into a master plan + **PRD** + reference docs. |
+| `/cto` | Turn the product brief into a **PRD** (with a Technical Foundation section) + reference docs. |
 | `/to-issues` | Slice the PRD into vertical-slice (tracer-bullet) issues on the GitHub kanban backlog. |
 | `/grab-issue` | Pull the top unblocked slice and build it end-to-end: code → review → fix → validate → slop scan + CSO → single commit → done. |
 | `/office-hours` | Run a weekly diagnostic. What's stuck, what's risky, what's the next call. |
@@ -52,7 +52,7 @@ The first five are the core pipeline (top-to-bottom); the rest are support comma
 ```
 /grill-me "rough idea"                 → documents/grilling-notes.md (non-technical stress-test)
 /cmo                                    → documents/product-brief.md
-/cto                                    → plans/master-plan.md + plans/prd.md + reference/*.md
+/cto                                    → plans/prd.md (Technical Foundation + user stories) + reference/*.md
 /to-issues                              → vertical-slice issues on GitHub (status:backlog)
 /grab-issue                             → build top slice → slop scan → CSO → 1 commit → status:done
 /grab-issue                             → next unblocked slice → ...
@@ -71,6 +71,8 @@ Slices live on **GitHub Issues**, not in the repo. The board is just labels:
 
 Plus `ready-for-agent` (fully specced, grabbable), `blocked` (has an open blocker), and `slice` (a tracer-bullet issue). `/grab-issue` moves a card across columns as it works it, and unblocks dependents when a slice closes.
 
+**To see it as a board:** open the repo's **GitHub Project** (Projects tab) — `/to-issues` adds each slice to it with a Status field that mirrors the `status:*` labels. Native drag-and-drop columns, nothing to host. Each slice is sized to be built by one subagent within a **120k-token** budget.
+
 ## What `/grab-issue` does before each commit
 
 For the slice's diff, before the single commit:
@@ -87,7 +89,7 @@ All must pass. Findings get fixed before commit (or for medium/low CSO, logged t
 CLAUDE.md                          # The 14 rules
 .claude/commands/                  # The 11 slash commands
 documents/                         # Grilling notes + product briefs (grill-me + CMO output)
-plans/                             # Master plan + PRD (CTO output)
+plans/                             # PRD with Technical Foundation (CTO output)
 reference/                         # Stack notes, conventions, API contracts, design language (CTO output)
   └── browser-debug-playbook.md    # Tool routing + CLI cheat-sheets for /debug
 design-references/                 # Pointer only — full library is remote

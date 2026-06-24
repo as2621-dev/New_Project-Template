@@ -1,14 +1,16 @@
 ---
-description: Produce the master plan, the PRD, and reference docs from the product brief. Run AFTER /cmo, BEFORE /to-issues.
+description: Produce the PRD (with a technical foundation) and reference docs from the product brief. Run AFTER /cmo, BEFORE /to-issues.
 argument-hint: [optional: path to product brief; defaults to documents/product-brief.md]
 ---
 
-# CTO — Master Plan + Reference Docs
+# CTO — PRD + Reference Docs
 
 You are the **CTO**. Your job is to take the product brief (from `/cmo`) and turn it into:
-1. A **master plan** — the technical north star (architecture, stack, milestones, key decisions)
-2. A **PRD** — the product spec (problem, solution, user stories, decisions) that `/to-issues` slices into a backlog
-3. A set of **reference docs** — the conventions and API/library references future work will rely on
+1. A single **PRD** — the product spec (problem, solution, user stories, decisions) **with a Technical Foundation section** (stack, architecture, key decisions, milestones) at the top, that `/to-issues` slices into a backlog
+2. A set of **reference docs** — the conventions and API/library references future work will rely on
+
+There is **no separate master plan** — the durable technical north star lives in the PRD's
+Technical Foundation section, so there is one source of truth, not two to keep in sync.
 
 You do NOT slice work into issues. That's `/to-issues`. You do NOT write feature code. That's `/grab-issue`.
 
@@ -33,56 +35,12 @@ Per Rule 1, state any assumption explicitly. Per Rule 7, if two options are clos
 
 If the brief lacks information to decide, ask the user before guessing.
 
-## Step 2 — Write the master plan
-
-Save to `plans/master-plan.md`:
-
-```markdown
-# Master Plan
-
-**Date:** [date]
-**Source brief:** documents/product-brief.md
-**Status:** Active
-
-## Vision (one paragraph)
-[What this product is, who it serves, why it wins — distilled from the brief]
-
-## Tech stack
-- **Frontend:** [choice + rationale]
-- **Backend:** [choice + rationale]
-- **Agents:** [choice + rationale or "N/A"]
-- **Jobs:** [choice + rationale or "N/A"]
-- **Hosting:** [choice + rationale]
-- **Languages:** [list]
-
-## Architecture (one diagram, in ASCII or mermaid)
-[Boxes for the major components and arrows for data flow]
-
-## Key design decisions
-[Numbered list. Each item: decision + why + what it rules out]
-1. ...
-2. ...
-
-## Milestones (not slices — slices come from /to-issues)
-- **M1 — [name]:** [what's true when this is done]
-- **M2 — [name]:** ...
-- **M3 — [name]:** ...
-
-## Riskiest assumption (from brief) and how we test it
-[Carry forward from product brief; describe how M1 or M2 de-risks it]
-
-## Out of scope
-[What this plan explicitly does NOT do — protect against scope creep]
-
-## Open questions for /to-issues
-[Anything the phase planner needs to resolve]
-```
-
-## Step 2b — Write the PRD
+## Step 2 — Write the PRD (with its Technical Foundation)
 
 Adapted from Matt Pocock's `to-prd`. **Synthesize — do not re-interview the user.** The
 grilling (`/grill-me`) and `/cmo` already did the interview; you have the brief and the
-master plan. Turn what you already know into a product spec that `/to-issues` can slice.
+Step 1 stack decision. Turn what you already know into a single product spec that
+`/to-issues` can slice. This one doc replaces the old master-plan + PRD pair.
 
 Use the project's domain vocabulary (Rule 11). Save to `plans/prd.md`:
 
@@ -90,7 +48,7 @@ Use the project's domain vocabulary (Rule 11). Save to `plans/prd.md`:
 # PRD — [product name]
 
 **Date:** [date]
-**Source:** documents/product-brief.md + plans/master-plan.md
+**Source:** documents/product-brief.md
 **Status:** Ready for /to-issues
 
 ## Problem Statement
@@ -98,6 +56,18 @@ Use the project's domain vocabulary (Rule 11). Save to `plans/prd.md`:
 
 ## Solution
 [The solution, from the user's perspective. What it does for them — not how it's built.]
+
+## Technical Foundation
+[The durable technical north star — there is no separate master plan, so this section IS it.]
+
+- **Tech stack** (from Step 1, each with a one-line rationale):
+  - Frontend / Backend / Agents / Jobs / Hosting / Languages — pick one each or "N/A".
+- **Architecture:** one ASCII or mermaid diagram — boxes for the major components, arrows
+  for data flow.
+- **Key design decisions:** numbered list; each item = decision + why + what it rules out.
+- **Milestones (coarse, not slices — slices come from /to-issues):**
+  - M1 — [name]: [what's true when done] · M2 — … · M3 — …
+- **Riskiest assumption + how we de-risk it:** [carry from the brief; which milestone tests it]
 
 ## User Stories
 [A LONG, numbered list. Format: "As a <actor>, I want <feature>, so that <benefit>."
@@ -107,7 +77,7 @@ vertical slices, so be extensive — thin gaps here become missing slices later.
 2. …
 
 ## Implementation Decisions
-[Carry forward the decisions already made in the master plan — modules to build/modify,
+[Carry forward the decisions from the Technical Foundation — modules to build/modify,
 interfaces, architectural choices, schema/API-contract shape. Prose, not file paths or
 code (they go stale). Exception: a tiny decision-encoding snippet — a type shape, schema,
 or state machine — is fine if it pins a decision more precisely than prose.]
@@ -172,16 +142,16 @@ If the product has a frontend:
 ## Step 4 — Sanity check against the brief
 
 Re-read `documents/product-brief.md`. Confirm:
-- The MVP from the brief maps cleanly to M1
+- The MVP from the brief maps cleanly to M1 in the Technical Foundation
 - The 90-day metric can actually be measured with the chosen stack
-- Nothing in the plan contradicts the unique angle
+- Nothing in the PRD contradicts the unique angle
 
-If any check fails, fix the plan or escalate to the user. Per Rule 12, do not paper over a mismatch.
+If any check fails, fix the PRD or escalate to the user. Per Rule 12, do not paper over a mismatch.
 
 ## Step 5 — Hand off
 
 End with a summary:
-> "Master plan saved to `plans/master-plan.md`. PRD saved to `plans/prd.md`. Reference docs: [list].
+> "PRD saved to `plans/prd.md` (Technical Foundation + user stories). Reference docs: [list].
 > **Next:** run `/to-issues` to slice the PRD into vertical-slice issues on the GitHub kanban backlog."
 
 ## Rules

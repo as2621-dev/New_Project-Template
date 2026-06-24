@@ -17,7 +17,7 @@ user the exact path at the end.
 ## What to include
 
 Keep it dense (Rule 14). Do NOT duplicate content that already lives in artifacts — link to
-it by path or URL instead (PRD, master plan, ADRs, GitHub issues, commits, diffs).
+it by path or URL instead (PRD, ADRs, GitHub issues, commits, diffs).
 
 ```markdown
 # Handoff — [date]
@@ -29,8 +29,7 @@ it by path or URL instead (PRD, master plan, ADRs, GitHub issues, commits, diffs
 [2-4 sentences: what's done, what's in flight, what's verified vs assumed.]
 
 ## Active artifacts (by reference, not copied)
-- PRD: plans/prd.md
-- Master plan: plans/master-plan.md
+- PRD: plans/prd.md (includes the Technical Foundation — no separate master plan)
 - Open slice issues: #x (in-progress), #y, #z (backlog)
 - Branch / last commit: <branch> @ <short-sha>
 

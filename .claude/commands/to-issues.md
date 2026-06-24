@@ -13,8 +13,9 @@ the old `/plan-phases`: no 4-sub-phase phases — thin end-to-end slices instead
 
 1. Read the PRD at `$ARGUMENTS` (default `plans/prd.md`). If missing, stop and tell the
    user to run `/cto` (the PRD now ships from `/cto`).
-2. Read `plans/master-plan.md`, `CLAUDE.md`, and relevant `reference/` docs for the domain
-   glossary and conventions (Rule 11 — issue titles use the project's vocabulary).
+2. Read `CLAUDE.md` and relevant `reference/` docs for the domain glossary and conventions
+   (Rule 11 — issue titles use the project's vocabulary). The PRD's Technical Foundation
+   section is the architecture context — there is no separate master plan.
 3. If the repo has code, skim it for the current state and **prefactoring opportunities**:
    "make the change easy, then make the easy change."
 
@@ -41,11 +42,33 @@ horizontal slice of one layer.
 - A finished slice is demoable / verifiable on its own
 - Prefactoring slices come first
 - Aim for the fewest seams — one is ideal
+- **Each slice must fit one subagent inside a 120k-token budget** (see sizing gate below)
 </vertical-slice-rules>
 
 Bad (horizontal): "Build the database schema." / "Build all the API endpoints."
 Good (vertical): "A user can sign up with email and see an empty dashboard" — touches
 schema + endpoint + UI + one test, demoable end-to-end.
+
+### Sizing gate — one slice = one subagent ≤ 120k tokens
+
+Every slice is built by a **single dedicated subagent** (via `/grab-issue`) that gets its
+own fresh context. That context has to hold: the issue body, `CLAUDE.md` + the relevant
+`reference/` docs, the existing files it must read, the new code it writes, and the
+test/validation loop. Budget that at **~120k tokens, hard ceiling**.
+
+For each drafted slice, estimate the footprint before publishing:
+
+- How many existing files must the builder read to do this? (rough: ~1k tokens per ~400
+  lines)
+- How much new code + tests will it write?
+- How chatty is the validate/fix loop likely to be (lint/typecheck/test output)?
+
+If a slice plausibly blows past ~120k, **split it** into smaller vertical slices (still
+end-to-end, just thinner — e.g. "happy path only" then "validation + error states" as a
+follow-on) and record the dependency. If a slice can't be made to fit without going
+horizontal, that's a finding about the PRD/architecture — surface it (Rule 12), don't ship
+a slice you know won't fit. Note the rough token estimate in the issue body so the builder
+knows its budget.
 
 ## Step 3 — Quiz the user before publishing
 
@@ -87,10 +110,32 @@ decision-encoding snippet from a prototype (schema, type shape, state machine) i
 
 ## Blocked by
 - #<issue-number> (or "None — can start immediately")
+
+## Build budget
+~[estimate]k tokens — one subagent, ceiling 120k. If the builder is approaching the
+ceiling, it should stop and split the remainder into a follow-on issue (Rule 6), not
+silently overrun.
 ```
 
 After publishing, post one comment on the PRD issue (or print) listing the created issue
 numbers and the dependency order.
+
+## Step 4b — Add the slices to the visual board (GitHub Projects)
+
+So the user has a board they can actually *see*, add every published slice to a **GitHub
+Project** (the native kanban view over these same issues — nothing to host):
+
+- If the repo/user has no Project yet, create one (a simple board with a single-select
+  **Status** field whose options match our columns: Backlog · In progress · Review · Done),
+  then tell the user the board URL.
+- Add each new slice issue as an item and set its Status to **Backlog**.
+- Keep the `status:*` labels as the source of truth; the Project's Status field mirrors
+  them. `/grab-issue` already moves the labels — note in the board that dragging a card and
+  relabeling are two views of the same state.
+
+Use the GitHub MCP tools (search ToolSearch for Projects / issue tools). If Projects isn't
+reachable, don't block — the labels still form the board; just tell the user the labels are
+live and the Project view can be added later.
 
 ## Step 5 — Hand off
 

@@ -12,9 +12,15 @@ This replaces `/run-phase`. One slice = one focused commit. Use the GitHub MCP t
 
 ## Step 0 — Prime context
 
-Read `CLAUDE.md`, `plans/master-plan.md`, `plans/prd.md`, and relevant `reference/` docs.
-Confirm the working tree is clean (`git status`); if not, stop and tell the user to
-commit/stash first.
+Read `CLAUDE.md`, `plans/prd.md` (its Technical Foundation is the architecture context —
+there is no separate master plan), and relevant `reference/` docs. Confirm the working tree
+is clean (`git status`); if not, stop and tell the user to commit/stash first.
+
+**Budget:** you are the single subagent for this slice, with a **120k-token ceiling**
+(Rule 6). The issue's "Build budget" line is your target. If you approach the ceiling
+before the acceptance criteria are met, do NOT silently overrun — stop, move the issue back
+to `status:backlog`, comment what's done and what's left, and split the remainder into a
+follow-on issue. A slice that won't fit is a slicing finding, not a reason to blow the budget.
 
 ## Step 1 — Pick the slice
 
