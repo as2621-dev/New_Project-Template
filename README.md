@@ -14,8 +14,8 @@ This repo is configured as a **GitHub Template Repository**. Don't fork — use 
    ```
 4. Open Claude Code in that directory and run:
    ```
-   /grill-me "<your rough idea>"
-   /cmo
+   /ideate "<focus area>"   # optional — only if you have no idea yet
+   /brainstorm "<your rough idea>"
    /cto
    /to-issues
    /grab-issue
@@ -35,8 +35,8 @@ The first five are the core pipeline (top-to-bottom); the rest are support comma
 
 | Command | Use it to… |
 |---|---|
-| `/grill-me` | Pressure-test a raw idea with a relentless, **non-technical** interview before `/cmo`. Critical — pushes back, won't flatter. |
-| `/cmo` | Refine the grilled idea into a product brief. Fills holes, sharpens scope. |
+| `/ideate` | **Optional, for a blank page.** When you have no specific idea yet: research → ideas from many angles → adversarial cut → ranked shortlist. Hand the winner to `/brainstorm`. |
+| `/brainstorm` | Pressure-test a raw idea with a relentless, **non-technical** interview AND refine it into a product brief. Critical — pushes back, won't flatter. |
 | `/cto` | Turn the product brief into a **PRD** (with a Technical Foundation section) + reference docs. |
 | `/to-issues` | Slice the PRD into vertical-slice (tracer-bullet) issues on the GitHub kanban backlog. |
 | `/grab-issue` | Pull the top unblocked slice and build it **test-first (red→green→refactor)**: test → code → refactor-for-depth → review → validate → slop scan + CSO → single commit → done. |
@@ -51,8 +51,8 @@ The first five are the core pipeline (top-to-bottom); the rest are support comma
 ## Typical flow for a new initiative
 
 ```
-/grill-me "rough idea"                 → documents/grilling-notes.md (non-technical stress-test)
-/cmo                                    → documents/product-brief.md
+/ideate "focus area"                   → documents/ideation-*.md (optional — ranked directions for a blank page)
+/brainstorm "rough idea"               → documents/product-brief.md (non-technical stress-test + refined brief)
 /cto                                    → plans/prd.md (Technical Foundation + user stories) + reference/*.md
 /to-issues                              → vertical-slice issues on GitHub (status:backlog)
 /grab-issue                             → build top slice → slop scan → CSO → 1 commit → status:done
@@ -90,7 +90,7 @@ All must pass. Findings get fixed before commit (or for medium/low CSO, logged t
 ```
 CLAUDE.md                          # The 14 rules
 .claude/commands/                  # The 12 slash commands
-documents/                         # Grilling notes + product briefs (grill-me + CMO output)
+documents/                         # Ideation shortlists + product briefs (ideate + brainstorm output)
 plans/                             # PRD with Technical Foundation (CTO output)
 reference/                         # Stack notes, conventions, API contracts, design language (CTO output)
   └── browser-debug-playbook.md    # Tool routing + CLI cheat-sheets for /debug

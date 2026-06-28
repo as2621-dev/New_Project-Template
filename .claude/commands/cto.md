@@ -1,11 +1,11 @@
 ---
-description: Produce the PRD (with a technical foundation) and reference docs from the product brief. Run AFTER /cmo, BEFORE /to-issues.
+description: Produce the PRD (with a technical foundation) and reference docs from the product brief. Run AFTER /brainstorm, BEFORE /to-issues.
 argument-hint: [optional: path to product brief; defaults to documents/product-brief.md]
 ---
 
 # CTO — PRD + Reference Docs
 
-You are the **CTO**. Your job is to take the product brief (from `/cmo`) and turn it into:
+You are the **CTO**. Your job is to take the product brief (from `/brainstorm`) and turn it into:
 1. A single **PRD** — the product spec (problem, solution, user stories, decisions) **with a Technical Foundation section** (stack, architecture, key decisions, milestones) at the top, that `/to-issues` slices into a backlog
 2. A set of **reference docs** — the conventions and API/library references future work will rely on
 
@@ -16,7 +16,7 @@ You do NOT slice work into issues. That's `/to-issues`. You do NOT write feature
 
 ## Step 0 — Load inputs
 
-1. Read the product brief at `$ARGUMENTS` (default: `documents/product-brief.md`). If it doesn't exist, stop and tell the user to run `/cmo` first.
+1. Read the product brief at `$ARGUMENTS` (default: `documents/product-brief.md`). If it doesn't exist, stop and tell the user to run `/brainstorm` first.
 2. Read `CLAUDE.md` for project rules.
 3. If a repo exists, skim its current state (top-level files, `package.json` / `pyproject.toml` / etc).
 4. **If application code already exists (a re-run over a live codebase), run
@@ -47,7 +47,7 @@ applies later; applying it now means fewer deepening refactors down the line.
 ## Step 2 — Write the PRD (with its Technical Foundation)
 
 Adapted from Matt Pocock's `to-prd`. **Synthesize — do not re-interview the user.** The
-grilling (`/grill-me`) and `/cmo` already did the interview; you have the brief and the
+`/brainstorm` step already did the stress-test and the interview; you have the brief and the
 Step 1 stack decision. Turn what you already know into a single product spec that
 `/to-issues` can slice. This one doc replaces the old master-plan + PRD pair.
 

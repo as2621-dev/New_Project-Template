@@ -1,5 +1,5 @@
 ---
-description: Pull the top unblocked slice off the GitHub kanban backlog, build it test-first (red-green-refactor), review it, and move it to done. Replaces /run-phase.
+description: Pull the top unblocked slice off the GitHub kanban backlog, build it test-first (red-green-refactor), review it, and move it to done.
 argument-hint: [optional: issue number to grab a specific slice; defaults to the next unblocked one]
 ---
 
@@ -7,7 +7,7 @@ argument-hint: [optional: issue number to grab a specific slice; defaults to the
 
 You execute ONE vertical-slice issue end-to-end, moving it across the kanban columns
 (GitHub labels): `status:backlog` → `status:in-progress` → `status:review` → `status:done`.
-This replaces `/run-phase`. One slice = one focused commit. Use the GitHub MCP tools
+One slice = one focused commit. Use the GitHub MCP tools
 (`mcp__github__*`, via ToolSearch) against the repo in session scope.
 
 ## Step 0 — Prime context

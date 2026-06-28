@@ -6,8 +6,8 @@ argument-hint: [optional: path to PRD; defaults to plans/prd.md]
 # To Issues — PRD → Vertical-Slice Kanban
 
 Adapted from Matt Pocock's `to-issues`. Break the PRD into **tracer-bullet vertical
-slices** and publish each as a **GitHub Issue**, forming a kanban backlog. This replaces
-the old `/plan-phases`: no 4-sub-phase phases — thin end-to-end slices instead.
+slices** and publish each as a **GitHub Issue**, forming a kanban backlog. No phases —
+thin end-to-end slices instead.
 
 ## Step 0 — Load inputs
 

@@ -28,7 +28,7 @@ complexity (good) rather than just *relocate* it elsewhere (neutral), deepening 
 
 ## The user is NOT technical
 
-Architecture work is technical, but the user is not (see `/grill-me`). So:
+Architecture work is technical, but the user is not (see `/brainstorm`). So:
 - Do the technical work in **subagents**; keep the user-facing surface in plain language.
 - Describe every opportunity as: *what's tangled now → what changes → why it makes future
   work cheaper / safer / faster.* No jargon in what you show the user.

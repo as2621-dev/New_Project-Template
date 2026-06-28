@@ -64,8 +64,8 @@ Default to surfacing uncertainty, not hiding it.
 ## Rule 13 — Always anticipate the next step
 Every response ends with **what comes next**. Not a vague "let me know if you need anything" — a concrete, specific next action the user is most likely to want.
 
-- After `/grill-me` → suggest `/cmo`
-- After `/cmo` → suggest `/cto`
+- After `/ideate` → suggest `/brainstorm` on the chosen direction
+- After `/brainstorm` → suggest `/cto`
 - After `/cto` → suggest `/to-issues`
 - After `/to-issues` → suggest `/grab-issue`
 - After `/grab-issue` succeeds → suggest the next `/grab-issue`, or `/office-hours` if the backlog is empty (or `/improve-architecture` if a few slices have landed since the last review)
@@ -104,11 +104,11 @@ This project ships with **12 slash commands**. The core pipeline runs top-to-bot
 
 | Command | When to use |
 |---|---|
-| `/grill-me` | **Before `/cmo`.** Relentless, NON-technical interview that pressure-tests the raw idea. Critical — pushes back, won't flatter. |
-| `/cmo` | After `/grill-me`. Refines scope, fills product holes, sharpens the pitch into a product brief. |
-| `/cto` | After `/cmo`. Produces **the PRD** (with a Technical Foundation: architecture, stack, key decisions, milestones) and reference docs. |
-| `/to-issues` | After `/cto`. Slices the PRD into vertical-slice (tracer-bullet) issues on the GitHub kanban backlog. Replaces `/plan-phases`. |
-| `/grab-issue` | After `/to-issues`. Pulls the top unblocked slice, builds it **test-first (red→green→refactor)**: test → code → refactor-for-depth → review → validate → slop scan + CSO → single commit → move to done. Replaces `/run-phase`. |
+| `/ideate` | **Optional, for a blank page.** When you have no specific idea yet: grounded research → ideas from many angles → adversarial cut → ranked shortlist. Hand the winner to `/brainstorm`. |
+| `/brainstorm` | After `/ideate` (or first, if you already have an idea). Relentless, NON-technical interview that pressure-tests the raw idea AND refines it into a product brief. Critical — pushes back, won't flatter. |
+| `/cto` | After `/brainstorm`. Produces **the PRD** (with a Technical Foundation: architecture, stack, key decisions, milestones) and reference docs. |
+| `/to-issues` | After `/cto`. Slices the PRD into vertical-slice (tracer-bullet) issues on the GitHub kanban backlog. |
+| `/grab-issue` | After `/to-issues`. Pulls the top unblocked slice, builds it **test-first (red→green→refactor)**: test → code → refactor-for-depth → review → validate → slop scan + CSO → single commit → move to done. |
 | `/improve-architecture` | Every few days. Finds shallow/tangled modules, proposes deepenings in plain language, files refactor slices, and syncs `plans/prd.md` + `reference/`. Also runs proactively inside `/cto` on re-runs. |
 | `/office-hours` | Weekly diagnostic — what's stuck, what's risky, what's next. Run regularly. |
 | `/rca` | When something breaks. Root-cause analysis, then proposes a fix. |
