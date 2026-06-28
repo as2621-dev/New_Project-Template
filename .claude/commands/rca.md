@@ -1,5 +1,5 @@
 ---
-description: Root-cause analysis for a bug or incident, then propose a fix. Does not commit — hand off to /run-phase or apply manually.
+description: Root-cause analysis for a bug or incident, then propose a fix. Does not commit — hand off to /grab-issue or apply manually.
 argument-hint: [bug description, error message, or path to a failing test]
 ---
 
@@ -112,11 +112,11 @@ Save to `.agents/rca/[YYYY-MM-DD]-[short-slug].md`:
 End with:
 > "RCA saved to `.agents/rca/[file].md`. To apply the fix, either:
 > - Apply it manually (small fix), then `/commit`
-> - Add it as a sub-phase to a new phase file, then `/run-phase`"
+> - File it as a new slice issue, then `/grab-issue`"
 
 ## Rules
 
 - Per Rule 1, if you can't reproduce, do not guess. Ask for more info.
 - Per Rule 12, do not declare a root cause you're not confident in. "Possibly related to X" is not a root cause — keep tracing.
 - Per Rule 2, the proposed fix should be the smallest one that addresses the root cause. If you find yourself proposing a refactor, the root cause is probably "design" — say so.
-- Do not apply the fix in this command. RCA diagnoses; `/run-phase` or manual edits + `/commit` apply.
+- Do not apply the fix in this command. RCA diagnoses; `/grab-issue` or manual edits + `/commit` apply.
