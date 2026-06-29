@@ -2,6 +2,8 @@
 
 A slim Claude Code template. 12 commands, 14 rules. No fluff.
 
+> **New here?** Read [`QUICKSTART.md`](./QUICKSTART.md) first — the 5-minute, plain-English version of what this does and how to use it. Come back here for the full details.
+
 ## Use this template for a new project
 
 This repo is configured as a **GitHub Template Repository**. Don't fork — use the template button.
