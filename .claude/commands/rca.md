@@ -107,6 +107,14 @@ Save to `.agents/rca/[YYYY-MM-DD]-[short-slug].md`:
 [if any — link to issues or future phases]
 ```
 
+## Step 6.5 — Compound the root cause
+
+If the root cause is **reusable and non-obvious** — a class of bug a future slice could re-hit, a
+contract trap, a missing-guard pattern — capture it with `/compound` (gated; pass the root cause +
+what the fix rules out). Skip routine causes; don't manufacture filler (Rule 2 / Rule 12). The
+saved `.agents/rca/*.md` is the full record; `/compound` distills the one durable lesson into
+`docs/solutions/` so `/grab-issue` B2.5 reads it next time.
+
 ## Step 7 — Hand off
 
 End with:

@@ -14,7 +14,7 @@ You are routing a request to **Codex** — a deliberately pedantic, literal, adv
 - You're making a design decision and want an adversarial stress-test.
 - You suspect Claude missed a subtle bug (race, off-by-one, lifetime, edge case).
 
-Do NOT invoke routinely. Codex is the "second opinion" tool, not the default reviewer. `/grab-issue` already does self-review + slop scan + CSO. Codex is for **when those weren't enough**.
+Do NOT invoke routinely. Codex is the "second opinion" tool, not the default reviewer. `/grab-issue` already does self-review + slop scan + CSO + a Claude-native multi-agent review panel. Codex is an **external** escape hatch for when those weren't enough — and it's optional: this repo's automatic in-loop review is codex-free.
 
 ## Three modes
 
@@ -100,6 +100,13 @@ After Codex returns, write to `.agents/codex/[date]-[mode]-[slug].md`:
 
 [user's call on how to act — fix now / new slice issue / accept with note]
 ```
+
+## Compound the lesson
+
+If a Codex finding taught something **reusable and non-obvious** — a correctness or security trap
+the codebase could re-hit, an anti-pattern to avoid — capture it with `/compound` once the user has
+made their call (gated; skip socially-smoothed nitpicks and one-off style notes, Rule 2 / Rule 12).
+Capture the lesson, not the whole transcript — the `.agents/codex/` record holds the full exchange.
 
 ## Rules
 

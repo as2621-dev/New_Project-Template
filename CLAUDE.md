@@ -100,7 +100,7 @@ This overrides verbosity elsewhere. It does NOT override Rule 12 or Rule 13.
 
 ## Commands
 
-This project ships with **12 slash commands**. The core pipeline runs top-to-bottom; the rest are support commands.
+This project ships with **13 slash commands**. The core pipeline runs top-to-bottom; the rest are support commands.
 
 | Command | When to use |
 |---|---|
@@ -108,7 +108,8 @@ This project ships with **12 slash commands**. The core pipeline runs top-to-bot
 | `/brainstorm` | After `/ideate` (or first, if you already have an idea). Relentless, NON-technical interview that pressure-tests the raw idea AND refines it into a product brief. Critical — pushes back, won't flatter. |
 | `/cto` | After `/brainstorm`. Produces **the PRD** (with a Technical Foundation: architecture, stack, key decisions, milestones) and reference docs. |
 | `/to-issues` | After `/cto`. Slices the PRD into vertical-slice (tracer-bullet) issues on the GitHub kanban backlog. |
-| `/grab-issue` | After `/to-issues`. Pulls the top unblocked slice, builds it **test-first (red→green→refactor)**: test → code → refactor-for-depth → review → validate → slop scan + CSO → single commit → move to done. |
+| `/grab-issue` | After `/to-issues`. **Dispatcher** — pulls the top unblocked slice and hands its whole build to a **fresh sub-agent** (clean context per slice, so `/loop /grab-issue` drains the backlog without context rot). The sub-agent builds it **test-first (red→green→refactor)**: test → code → refactor-for-depth → simplify → slop scan → CSO → acceptance check → browser-verify UI slices (puppeteer regression + browser-use walkthrough) → single commit → **Claude-native multi-agent review panel** (residual gate) → move to done. |
+| `/compound` | Capture a reusable, non-obvious learning into `docs/solutions/` — the compounding store `/grab-issue` B2.5 reads before building. The canonical write recipe (gated, dedups). Called as a tail step by `/grab-issue`, `/rca`, `/debug`, `/codex`, `/improve-architecture`; run standalone for any insight that surfaced outside a command. |
 | `/improve-architecture` | Every few days. Finds shallow/tangled modules, proposes deepenings in plain language, files refactor slices, and syncs `plans/prd.md` + `reference/`. Also runs proactively inside `/cto` on re-runs. |
 | `/office-hours` | Weekly diagnostic — what's stuck, what's risky, what's next. Run regularly. |
 | `/rca` | When something breaks. Root-cause analysis, then proposes a fix. |
@@ -117,7 +118,7 @@ This project ships with **12 slash commands**. The core pipeline runs top-to-bot
 | `/codex` | Adversarial second opinion when stuck or want pushback. 200-IQ pedant. User-triggered, not automatic. |
 | `/handoff` | Compact the conversation into a handoff doc (saved to temp, not committed) so a fresh agent can continue. |
 
-The PRD (with its Technical Foundation) lives in `plans/prd.md` — there is no separate master plan. Slice work lives on **GitHub Issues** — the kanban board is the `status:backlog` / `status:in-progress` / `status:review` / `status:done` labels, viewable as a drag-and-drop board in the repo's **GitHub Project**. Each slice is sized to one subagent within a 120k-token budget. Reference docs live in `reference/`. Codex transcripts in `.agents/codex/`. CSO follow-ups in `.agents/cso-findings/`. Debug reports in `.agents/debug/` (tooling playbook: `reference/browser-debug-playbook.md`). Handoff docs go to the OS temp / scratchpad, never committed.
+The PRD (with its Technical Foundation) lives in `plans/prd.md` — there is no separate master plan. Slice work lives on **GitHub Issues** — the kanban board is the `status:backlog` / `status:in-progress` / `status:review` / `status:done` labels, viewable as a drag-and-drop board in the repo's **GitHub Project**. Each slice is sized to one subagent within a 120k-token budget — `/grab-issue` spawns a **fresh sub-agent per slice**, so draining the backlog with `/loop /grab-issue` keeps the orchestrator's context flat. Reference docs live in `reference/`. Durable learnings (the compounding store, written by `/compound`) live in `docs/solutions/`. Codex transcripts in `.agents/codex/`. CSO follow-ups in `.agents/cso-findings/`. Debug reports in `.agents/debug/` (browser tooling playbook for both `/debug` and UI-slice verification: `reference/browser-debug-playbook.md`). Handoff docs go to the OS temp / scratchpad, never committed.
 
 **Design references (remote):** The full design library lives in a separate public repo to keep this template green:
 

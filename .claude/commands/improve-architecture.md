@@ -107,6 +107,14 @@ make a **surgical** update (Rule 3 — touch only what changed):
 Per Rule 7, if a new decision contradicts an existing doc, pick one, update it, and flag the
 other — do not leave both in place.
 
+## Step 5.5 — Compound the pattern
+
+When an accepted deepening reflects a **reusable shallow→deep pattern** — a seam worth repeating, a
+class of tangle to avoid — capture it with `/compound` (gated; one entry per distinct pattern, not
+one per slice filed). Step 5 syncs the *decision* into `plans/prd.md` + `reference/`; `/compound`
+distills the transferable *pattern* into `docs/solutions/` so `/grab-issue` B2.5 applies it on the
+next build. Skip if the refactor was local and taught nothing general (Rule 2 / Rule 12).
+
 ## Step 6 — Hand off
 
 End with a summary:

@@ -39,7 +39,7 @@ The first five are the core pipeline (top-to-bottom); the rest are support comma
 | `/brainstorm` | Pressure-test a raw idea with a relentless, **non-technical** interview AND refine it into a product brief. Critical — pushes back, won't flatter. |
 | `/cto` | Turn the product brief into a **PRD** (with a Technical Foundation section) + reference docs. |
 | `/to-issues` | Slice the PRD into vertical-slice (tracer-bullet) issues on the GitHub kanban backlog. |
-| `/grab-issue` | Pull the top unblocked slice and build it **test-first (red→green→refactor)**: test → code → refactor-for-depth → review → validate → slop scan + CSO → single commit → done. |
+| `/grab-issue` | **Dispatcher** — pull the top unblocked slice and hand its build to a **fresh sub-agent** (clean context per slice; `/loop /grab-issue` drains the backlog without context rot). The sub-agent builds it **test-first (red→green→refactor)**: test → code → simplify → slop scan → CSO → acceptance → browser-verify UI (puppeteer + browser-use) → single commit → **multi-agent review panel** → done. |
 | `/improve-architecture` | Every few days. Find shallow/tangled modules, propose deepenings in plain language, file refactor slices, and sync the PRD Technical Foundation + reference docs. Runs proactively inside `/cto` on re-runs. |
 | `/office-hours` | Run a weekly diagnostic. What's stuck, what's risky, what's the next call. |
 | `/rca` | Root-cause analysis for a bug. Diagnoses + proposes a fix. Doesn't apply it. |
@@ -55,8 +55,8 @@ The first five are the core pipeline (top-to-bottom); the rest are support comma
 /brainstorm "rough idea"               → documents/product-brief.md (non-technical stress-test + refined brief)
 /cto                                    → plans/prd.md (Technical Foundation + user stories) + reference/*.md
 /to-issues                              → vertical-slice issues on GitHub (status:backlog)
-/grab-issue                             → build top slice → slop scan → CSO → 1 commit → status:done
-/grab-issue                             → next unblocked slice → ...
+/grab-issue                             → fresh sub-agent builds slice → simplify → slop/CSO → browser-verify UI → 1 commit → review panel → status:done
+/loop /grab-issue                       → drain the backlog one slice at a time (fresh context each → no rot)
 /improve-architecture                   → every few days: deepening RFCs + synced PRD/reference docs
 /office-hours                           → weekly check-in
 /rca "thing X broke"                    → .agents/rca/*.md (when bugs happen)
@@ -75,15 +75,20 @@ Plus `ready-for-agent` (fully specced, grabbable), `blocked` (has an open blocke
 
 **To see it as a board:** open the repo's **GitHub Project** (Projects tab) — `/to-issues` adds each slice to it with a Status field that mirrors the `status:*` labels. Native drag-and-drop columns, nothing to host. Each slice is sized to be built by one subagent within a **120k-token** budget.
 
-## What `/grab-issue` does before each commit
+## What `/grab-issue` does to ship a slice
 
-For the slice's diff, before the single commit:
+`/grab-issue` is a thin **dispatcher**: it picks one unblocked slice and hands the whole build to a **fresh sub-agent** with its own 120k-token context, so a long `/loop /grab-issue` never accumulates context rot. That sub-agent runs the slice end-to-end:
 
-1. **Acceptance check** — each acceptance-criteria checkbox on the issue actually holds (a real check, not "it compiles")
-2. **Slop scan** — flags vacuous comments, `any` casts, defensive try/catch, dead code, marketing voice in docs, hardcoded `localhost`, leftover TODOs
-3. **CSO lite** — secrets in diff, auth boundary changes, input validation gaps, injection surface, new dependency health, log hygiene
+1. **Plan** — prior learnings (`docs/solutions/`), edge-case enumeration, conditional risk lenses (security / perf / migration / data / architecture / git-history)
+2. **Build test-first** — red→green→refactor, one behavior at a time; UI behaviors also get a committed **puppeteer** regression test
+3. **Simplify** — a `/simplify` quality pass (reuse / efficiency / altitude), pre-commit
+4. **Slop scan** — vacuous comments, `any` casts, defensive try/catch, dead code, marketing voice, hardcoded `localhost`, leftover TODOs
+5. **CSO lite** — secrets, auth boundary changes, input validation gaps, injection surface, new dependency health, log hygiene
+6. **Acceptance check** — each acceptance-criteria checkbox on the issue actually holds (a real check, not "it compiles")
+7. **Browser walkthrough (UI slices)** — drive the real acceptance flow with **browser-use** in a live browser; not done until it passes
+8. **Commit + multi-agent review panel** — one commit, then a Claude-native panel of independent reviewer sub-agents (correctness + simplicity always; security/perf/contract/data when the diff fires them) behind a defer-vs-fix residual gate
 
-All must pass. Findings get fixed before commit (or for medium/low CSO, logged to `.agents/cso-findings/` for follow-up).
+Critical/high findings are fixed before done; deferred medium/low land in a durable sink (`.agents/cso-findings/`, a residuals file, or a new slice issue) — never dropped.
 
 ## Directory layout
 
@@ -93,7 +98,7 @@ CLAUDE.md                          # The 14 rules
 documents/                         # Ideation shortlists + product briefs (ideate + brainstorm output)
 plans/                             # PRD with Technical Foundation (CTO output)
 reference/                         # Stack notes, conventions, API contracts, design language (CTO output)
-  └── browser-debug-playbook.md    # Tool routing + CLI cheat-sheets for /debug
+  └── browser-debug-playbook.md    # Browser tooling: /debug routing + UI-slice puppeteer/browser-use (§7)
 design-references/                 # Pointer only — full library is remote
   └── RESOURCES.md                 # Points to github.com/ashesh2621/design-references
                                    # (86 skills + 511 design systems + 2,827 components
